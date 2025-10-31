@@ -1,0 +1,30 @@
+site_name: CS231n Notes
+theme:
+  name: material
+  language: en
+repo_url: https://github.com/kantarcise/cs231n
+nav:
+  - Home: index.md
+  - Lectures:
+    - "Lecture 01 - First Lecture - Fei Fei Li": lectures/lecture01.md
+    - "Lecture 02 - Second Lecture - Andrej Karpathy": lectures/lecture02.md
+    - "Lecture 03 - Third Lecture: Andrej Karpathy": lectures/lecture03.md
+    - "Lecture 04 - Fourth Lecture: Andrej Karpathy": lectures/lecture04.md
+    - "Lecture 05 - Lecture 5: Training Neural Networks, Part I": lectures/lecture05.md
+    - "Lecture 06 - Lecture 6: Training Neural Networks, Part 2": lectures/lecture06.md
+    - "Lecture 07 - From Andrej Karpathy ⛵": lectures/lecture07.md
+    - "Lecture 08 - From Justin Johnson": lectures/lecture08.md
+    - "Lecture 09 - Andrej Karpathy is Back Baby! 🥰": lectures/lecture09.md
+    - "Lecture 10 - From Andrej Karpathy": lectures/lecture10.md
+    - "Lecture 11 - From Justin Johnson 😉": lectures/lecture11.md
+    - "Lecture 12 - From Justin Johnson": lectures/lecture12.md
+    - "Lecture 13 - From Justin Johnson": lectures/lecture13.md
+    - "Lecture 14 - From Andrej Karpathy 💙 💙 💙": lectures/lecture14.md
+    - "Lecture 15 - From Andrej Karpathy": lectures/lecture15.md
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.tasklist:
+      custom_checkbox: true

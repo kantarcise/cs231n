@@ -63,18 +63,18 @@ In this assignment you will practice writing backpropagation code, and training 
 - Explore various applications of image gradients, including saliency maps, fooling images, class visualizations.
 
 ### Q1: Multi-Layer Fully Connected Neural Networks
-The notebook [`FullyConnectedNets.ipynb`](https://github.com/kantarcise/cs231n/blob/main/assignment2/FullyConnectedNets.ipynb) will have you implement fully connected networks of arbitrary depth. To optimize these models you will implement several popular update rules.
+The notebook [`FullyConnectedNets.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/FullyConnectedNets.ipynb) will have you implement fully connected networks of arbitrary depth. To optimize these models you will implement several popular update rules.
 
 ### Q2: Batch Normalization
-In notebook [`BatchNormalization.ipynb`](https://github.com/kantarcise/cs231n/blob/main/assignment2/BatchNormalization.ipynb) you will implement batch normalization, and use it to train deep fully connected networks.
+In notebook [`BatchNormalization.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/BatchNormalization.ipynb) you will implement batch normalization, and use it to train deep fully connected networks.
 
 ### Q3: Dropout
-The notebook [`Dropout.ipynb`](https://github.com/kantarcise/cs231n/blob/main/assignment2/Dropout.ipynb) will help you implement dropout and explore its effects on model generalization.
+The notebook [`Dropout.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/Dropout.ipynb) will help you implement dropout and explore its effects on model generalization.
 
 ### Q4: Convolutional Neural Networks
-In the notebook [`ConvolutionalNetworks.ipynb`](https://github.com/kantarcise/cs231n/blob/main/assignment2/ConvolutionalNetworks.ipynb) you will implement several new layers that are commonly used in convolutional networks.
+In the notebook [`ConvolutionalNetworks.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/ConvolutionalNetworks.ipynb) you will implement several new layers that are commonly used in convolutional networks.
 
 ### Q5: PyTorch on CIFAR-10
-For this part, you will be working with PyTorch, a popular and powerful deep learning framework. Open up [`PyTorch.ipynb`](https://github.com/kantarcise/cs231n/blob/main/assignment2/PyTorch.ipynb). There, you will learn how the framework works, culminating in training a convolutional network of your own design on CIFAR-10 to get the best performance you can.
+For this part, you will be working with PyTorch, a popular and powerful deep learning framework. Open up [`PyTorch.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/PyTorch.ipynb). There, you will learn how the framework works, culminating in training a convolutional network of your own design on CIFAR-10 to get the best performance you can.
 
 There was also a Network-Visualization question, but that is moved to Assignment 3.

@@ -14,7 +14,8 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   primary: light blue
-
+  features:
+    - navigation.top
 repo_url: https://github.com/kantarcise/cs231n
 nav:
   - Home: index.md

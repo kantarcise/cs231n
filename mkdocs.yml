@@ -31,7 +31,7 @@ nav:
     - "7. Convolutional Neural Networks": lectures/lecture07.md
     - "8. ConvNets for spatial localization, Object Detection": lectures/lecture08.md
     - "9. Understanding and visualizing ConvNets": lectures/lecture09.md
-    - "10. Recurrent Neural Networks (RNN), Long Short Term Memory (LSTM)": lectures/lecture10.md
+    - "10. RNNs & LSTMs": lectures/lecture10.md
     - "11. Training ConvNets in practice, Distributed training": lectures/lecture11.md
     - "12. Overview of Caffe/Torch/Theano/TensorFlow": lectures/lecture12.md
     - "13. Segmentation": lectures/lecture13.md

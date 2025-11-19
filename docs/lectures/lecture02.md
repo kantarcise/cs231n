@@ -1012,4 +1012,4 @@ The next neuron will be just like okay I will just get a weighted sum of you guy
 
 ### Tools and Assignment 1
 
-See the details for Assignment 1 [here](assignments/README.md).
+See the details for Assignment 1 [here](../assignments/README.md).

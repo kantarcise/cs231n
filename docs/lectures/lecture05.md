@@ -1,577 +1,560 @@
 Part of [CS231n Winter 2016](../index.md)
 
 ---
-# Lecture 5:  Training Neural Networks,  Part I
+
+## Lecture 5: Training Neural Networks, Part I
+
+Here are some details about the assignments.
 
 ![5001](../img/cs231n/winter2016/5001.png)
 
-Some things to think about project proposals.
+In this lecture, we transition from the theoretical architecture of neural networks to the practical reality of training them.
+
+We have defined the score function and the loss function, and we know how to compute gradients via backpropagation. Now we must navigate the optimization landscape.
+
+### Project Proposals and Advice
+
+Before beginning the technical content, a few words on course projects.
 
 ![5002](../img/cs231n/winter2016/5002.png)
 
 ![5003](../img/cs231n/winter2016/5003.png)
 
-You can finetune!
+One effective strategy is **fine-tuning**. You rarely need to train a network from scratch. Instead, you can take a pre-trained model (trained on a large dataset like ImageNet) and adapt it to your specific problem.
 
 ![5004](../img/cs231n/winter2016/5004.png)
 
-Chop of the classifier, and train the neural network as a feature extractor? How man ?
+You can "chop off" the final classification layer and treat the rest of the network as a fixed feature extractor, training only a new linear classifier on top. Alternatively, you can fine-tune the entire network.
 
 ![5005](../img/cs231n/winter2016/5005.png)
 
-You have a lot of pretrained datasets!
+There are many pre-trained models available (Caffe Model Zoo, etc.) that you can leverage.
 
 ![5006](../img/cs231n/winter2016/5006.png)
 
-LOL. During hyper parameter optimization, you will need a lot of compute. Be careful.
+A word of caution regarding compute resources:
 
 ![5007](../img/cs231n/winter2016/5007.png)
 
-Finite compute.
+Hyperparameter optimization requires significant computational power. Be mindful of your resource usage, as compute is finite.
 
 ![5008](../img/cs231n/winter2016/5008.png)
 
-We are here. 
-## batch a data - forward - backprop - update
+### Training Overview
+
+We are now at the stage where we loop through the training process:
 
 ![5009](../img/cs231n/winter2016/5009.png)
 
-We have a Optimization problem at hand.
+1.  **Sample** a batch of data.
+2.  **Forward** prop to compute loss.
+3.  **Backprop** to compute gradients.
+4.  **Update** parameters.
+
+This is an optimization problem.
 
 ![5010](../img/cs231n/winter2016/5010.png)
 
-NN's can get really large.
+Neural networks can be incredibly large and complex.
 
 ![5011](../img/cs231n/winter2016/5011.png)
 
-We need calculus - just chain rule.
-
-![5011](../img/cs231n/winter2016/5011.png)
-
-Chain rule seen here.
+However, the complexity is managed by the chain rule. We simply need to implement the `forward` and `backward` API for each module.
 
 ![5012](../img/cs231n/winter2016/5012.png)
 
-We need a forward/backward API.
-
 ![5013](../img/cs231n/winter2016/5013.png)
 
-Simple Multiplication Gate:
+For example, a simple multiplication gate:
 
 ![5014](../img/cs231n/winter2016/5014.png)
 
-LEGO's.
+We can think of these as LEGO blocks that we stack together.
 
 ![5015](../img/cs231n/winter2016/5015.png)
 
-We saw the activation functions here, first time ever.
+We have seen activation functions before, which introduce non-linearity.
 
 ![5016](../img/cs231n/winter2016/5016.png)
 
-The resemblance of NN and Brain.
+And we have discussed the loose inspiration from biological neurons.
 
 ![5017](../img/cs231n/winter2016/5017.png)
 
-FC are only the layers that are not input (which have computation).
+In a fully connected network, the layers with learnable weights (Fully Connected layers) are interleaved with activation functions.
 
 ![5018](../img/cs231n/winter2016/5018.png)
 
-## History - Zoomed Out Field!
+### History and Context
+
+It is helpful to zoom out and look at the history of this field.
 
 ![5019](../img/cs231n/winter2016/5019.png)
 
-1960 is the start, the perceptron.
-## the perceptron
-
-they had to actually build from circuits and electronics.
-
-Activation function was a binary step function, it was not differentiable. 
-
-So back propagation was not even here. It came much later. 
-
-There was no loss function also.
+**1957: The Perceptron (Rosenblatt)**: Early implementations were built with hardware circuits.
 
 ![5020](../img/cs231n/winter2016/5020.png)
 
-They started to stack perceptons, still building on hardware. Just rules.
+The activation function was a binary step function. Since this is not differentiable, backpropagation as we know it was not possible. They used simple update rules.
+
+**1960: Adaline/Madaline (Widrow & Hoff)**:
+Researchers started stacking these units (Multilayer Perceptron).
 
 ![5021](../img/cs231n/winter2016/5021.png)
 
-Scientist was excited but would under deliver, they did not work good.
+However, without a way to train the hidden layers effectively, progress stalled.
 
-First time you see back propagation like rules, seen on paper. People got excited again. Training would get stuck and it would not work.
+**1986: Backpropagation (Rumelhart, Hinton, Williams)**:
+The field was reignited by the derivation of backpropagation, allowing training of multi-layer networks.
 
 ![5022](../img/cs231n/winter2016/5022.png)
 
-It was 2006, when a 10 layer NN would actually trains properly.
+Despite the excitement, training deep networks proved difficult. Gradients would vanish or explode, and training would get stuck.
 
-Which is based on RBZ:
-# RBZ - Restricted Boltzman Machine.
-
-Instead of training all 10 layers all at once, they came up with this unsupervised pretraining scheme. You train your first layer using an unsupervised objective than you train your second layer on top of it and third and fourth.
-
-Once all of them are trained, than you start backpropogation. You start the fine-tuning step.
-
-You actually can start with backpropogation for training but you have to be very careful with initialization.
-
-They used sigmoids and sigmoids are really not good activation functions.
+**2006: Deep Learning & RBMs (Hinton, Salakhutdinov)**:
+A breakthrough came with ***Deep Learning.*** The key idea was unsupervised pre-training using Restricted Boltzmann Machines (RBMs).
 
 ![5023](../img/cs231n/winter2016/5023.png)
 
-Things started to work relatively well.
+You would train the first layer to reconstruct the input, then freeze it and train the second layer, and so on. Finally, you would fine-tune the whole network with backpropagation. This initialization allowed for deeper networks.
 
-In 2010, strong results. 
-
-In speech recognition area, they had this `GMM` - `HMM` stuff, they swapped out one part and subbed in a NN, THAT GAVE THEM HUGE IMPROVEMENTS.
-
-In Vision - 2012 crushed the competition. Field exploded.
+**2010-2012: The Explosion**:
+By 2010, acoustic modeling (speech recognition) saw huge gains by replacing GMMs with Deep Neural Networks. Then came 2012.
 
 ![5024](../img/cs231n/winter2016/5024.png)
 
-Why this happened in 2012? 
-- We figured out initialization
-- We had better activations
-- We had more data
-- We had better compute.
+AlexNet crushed the ImageNet competition. The field exploded.
 
----
+Why 2012?
 
-Next 2 lectures will be about, these:
+-   Better initialization (no longer needed complex pre-training).
+
+-   Better activation functions (ReLU).
+
+-   More data (ImageNet).
+
+-   Better compute (GPUs).
+
+### Activation Functions
+
+We will now focus on the specific choices we make when designing and training these networks. First: Activation Functions.
 
 ![5025](../img/cs231n/winter2016/5025.png)
-## activation functions:
 
 ![5026](../img/cs231n/winter2016/5026.png)
 
-Different proposals:
+There are many options available.
 
 ![5027](../img/cs231n/winter2016/5027.png)
 
-Historically, squashes a number between 0 and 1.
+#### Sigmoid
+Historically, the sigmoid function was very common. It squashes real-valued inputs to the range [0, 1].
 
 ![5028](../img/cs231n/winter2016/5028.png)
 
-Problems (Vanishing gradient):
+However, it has severe problems:
+
+1.  **Vanishing Gradients**: When the neuron is saturated (output close to 0 or 1), the gradient is nearly zero.
 
 ![5029](../img/cs231n/winter2016/5029.png)
 
-We would like to back propagate on sigmoid gate,
+During backpropagation, this local gradient is multiplied by the upstream gradient. If the local gradient is zero, it "kills" the gradient flow to all previous layers.
 
 ![5030](../img/cs231n/winter2016/5030.png)
 
-Gradient is very low when X is 10 or $-10$
-# Slope is actually 0. You can see that.
-
-## If your neuron is saturated (which means they are either 0 or 1) than gradient cannot backpropogate through the network.
-
-Only active region of the sigmoid will work.
+2.  **Not Zero-Centered**: The output is always positive.
 
 ![5031](../img/cs231n/winter2016/5031.png)
 
-When you preprocess data, you want to make sure that it is zero centered. 
-
-![5031](../img/cs231n/winter2016/5031.png)
-## If your x's are all positive what happens on gradients on w ?
+If the input $x$ to a neuron is always positive, then the gradients on the weights $w$ will all be either positive or negative (depending on the gradient of the loss).
 
 ![5032](../img/cs231n/winter2016/5032.png)
 
-All gradients of w are either all positive or all negative. 
-$$X * grad(f)$$
-
-If the gradient of the output of the neuron is positive. Then all your W gradients will be positive and vice versa.
-
-The problem is you are constrained in the update you can make.
+This constrains the updates to be in specific directions (zig-zagging), which is inefficient.
 
 ![5033](../img/cs231n/winter2016/5033.png)
 
-## You can see this empirically, when you train with things that are not zero centered, you will observe slower convergence.
+Empirically, non-zero-centered data leads to slower convergence. So you want to have things that are zero centered.
 
-# You want to have things that are zero centered.
+3.  **Expensive**: The `exp()` function is computationally expensive compared to simple math operations.
 
 ![5034](../img/cs231n/winter2016/5034.png)
 
-Literally simply, just expensive.
-## when we are training CNN's most of compute time is actually in convolutions and dot products
+When we are training CNN's most of compute time is actually in convolutions and dot products. So we want to make sure that we are using efficient ways to compute these.
 
-exp is however expensive.
+Yann Lecun recommended using `tanh()` instead of sigmoids.
 
-Yann Lecun recommended using tanh() instead of sigmoids.
+#### Tanh
+The hyperbolic tangent squashes numbers to [-1, 1].
 
 ![5035](../img/cs231n/winter2016/5035.png)
 
-Yeah, still vanishing gradients.
-# In 2012 first convolutional neural networks paper, ReLu makes CNN's converge faster. 🎱
+-   **Pros**: It is zero-centered.
+-   **Cons**: It still suffers from the vanishing gradient problem when saturated.
 
-Just thresholding. This is the default.
+#### ReLU (Rectified Linear Unit)
+The modern standard: $f(x) = \max(0, x)$.
 
 ![5036](../img/cs231n/winter2016/5036.png)
-## Problems, not zero centered. when x < 0 gradient dies.
+
+-   **Pros**:
+    -   Does not saturate in the positive region.
+    -   Computationally very efficient.
+    -   Converges much faster (e.g., 6x faster for AlexNet).
+-   **Cons**:
+    -   Not zero-centered.
+    -   **Dead ReLU Problem**: When $x < 0$ gradient dies.
 
 ![5037](../img/cs231n/winter2016/5037.png)
 
-If it is positive, just passes through.
-# At x = 0 gradient is undefined.
-
-## Whenever we are talking gradient in this course we are talking about sub-gradient, generalization of gradient to functions that are sometimes non differentiable.
+If a neuron falls into the negative region, its output is 0 and its gradient is 0. It effectively "dies" and may never recover.
 
 ![5038](../img/cs231n/winter2016/5038.png)
-## In practice, if you are unlucky in your initialization, ded relus. They will not come back.
+
+In practice, you might find that 10-20% of your network is "dead" if you are not careful.
 
 ![5039](../img/cs231n/winter2016/5039.png)
 
-Sometimes when you are training, you stop and look at the activation on neurons,
-## as much as %10 or %20 of your network is ded. These are neurons that are never turned on for anything in the training data.
+> **Tip**: Initialize biases with a small positive number (e.g., 0.01) to ensure ReLUs start active.
 
-## To avoid this problem, initialize with instead of 0 bias, 0.01 bias
+#### Leaky ReLU
+Attempts to fix the dead ReLU problem by having a small negative slope (e.g., 0.01) when $x < 0$.
 
 ![5040](../img/cs231n/winter2016/5040.png)
 
-An approach to solve ReLu. Neurons are not dying.
-##  Andrej is not completely sold on them.
+#### PReLU (Parametric ReLU)
+The slope in the negative region is a learnable parameter $\alpha$. Andrej is not completely sold on them.
 
 ![5041](../img/cs231n/winter2016/5041.png)
 
-Also PReLu is possible. The slope can be a parameter.
+#### ELU (Exponential Linear Unit)
+A recent proposal (Clevert et al., 2015) that has benefits of ReLU but is closer to zero mean.
 
 ![5042](../img/cs231n/winter2016/5042.png)
 
-2 months ago at the lecture times, a new paper came out:
+#### Maxout
+
+Proposed by Ian Goodfellow et al. It generalizes ReLU and Leaky ReLU.
+
+$f(x) = \max(w_1^T x + b_1, w_2^T x + b_2)$
 
 ![5043](../img/cs231n/winter2016/5043.png)
 
-`Ian Goodfellow et al` is how you read the top left.
-
-A different form of Neuron.
-## It has 2 weights. 🤔
+It has no saturation and no dying ReLU problem, but it doubles the number of parameters per neuron.
 
 ![5044](../img/cs231n/winter2016/5044.png)
-## a lot of the optimization process is not just about loss function, it is more about the dynamics of the backwards flow of the gradients.
+
+#### Summary of Activations
 
 ![5045](../img/cs231n/winter2016/5045.png)
-## Sigmoids are used in LSTM and RNN's but there are reason for that.
+
+**Recommendation**:
+
+-   Use **ReLU**. Be careful with your learning rates.
+
+-   Try **Leaky ReLU** or **Maxout**.
+
+-   Try **Tanh** but don't expect much.
+
+-   **Never use Sigmoid**.
 
 ![5046](../img/cs231n/winter2016/5046.png)
-## Very common to zero center your the data = Along every single feature you subtract the mean.
 
-### In ML literature (normalize the data) you do standardizing (normalize the standart deviation), or you can make sure the min and the max are within -1 and 1.
+---
 
-In images normalizing is not common.
+### Data Preprocessing
+
+We generally want our input data to be well-behaved.
 
 ![5047](../img/cs231n/winter2016/5047.png)
 
-In Machine Learning these common but in images we are not using these:
+Standard practice in Machine Learning involves:
 
-- PCA - you can make the covariance structure become diagonal
-- Whitened data - squish the data - covariance matrix becomes diagonal.
-## PCA is not really common becuase images are really high dimentional objects with a lot of pixels so covariance matrices would be huge.
+1.  **Mean Subtraction**: Center the data around zero.
+
+2.  **Normalization**: Scale the data so each dimension has unit variance.
 
 ![5048](../img/cs231n/winter2016/5048.png)
 
-In images, mean centering:
-
-- AlexNet has the mean image of orange blob
-- You can subtract based on RGB.
+Other techniques like **PCA** and **Whitening** (decorrelating the data) are common in general ML but less common in image processing due to the high dimensionality.
 
 ![5049](../img/cs231n/winter2016/5049.png)
 
-People were not careful enough with this:
+**For Images**:
+
+-   Subtract the **mean image** (e.g., AlexNet).
+
+-   Or subtract the **per-channel mean** (e.g., VGGNet).
+
+-   Normalization is usually not strictly necessary because pixel values are already on the same scale (0-255).
 
 ![5050](../img/cs231n/winter2016/5050.png)
 
-How not to do it:
+### Weight Initialization
+
+How do we start the optimization? We cannot initialize all weights to zero.
 
 ![5051](../img/cs231n/winter2016/5051.png)
 
-If you set all weights to 0:
-
-All output would be zero, there is nothing **symmetry breaking**.
+If all weights are zero, every neuron computes the same output and gets the same gradient update. There is no **symmetry breaking**.
 
 ![5052](../img/cs231n/winter2016/5052.png)
 
-This is the first valid approach:
+#### Small Random Numbers
+
+A common first attempt is small random noise: `W = 0.01 * np.random.randn(D, H)`.
 
 ![5053](../img/cs231n/winter2016/5053.png)
 
-In deep networks things go wrong with 0.01 w's, let's see an example:
+This works for shallow networks, but fails for deep ones.
 
-```python
-# sample a dataset first 1000 points 500 dimentional
-
-# make hidden layers and nonlineararties
-
-# use tanh
-
-# take unit gaussian data and forward it in network
-
-# in the first for loop, you are just forward propogating the network
-```
-
-What happens to the statistics of the neurons activations throughout the network with this initialization.
-- We will look at mean and standard deviations
-- we will plot histograms
+Let's look at an experiment with a 10-layer network using Tanh non-linearities.
 
 ![5054](../img/cs231n/winter2016/5054.png)
 
-Means and standard deviations are printed, means stays around 0 but standard deviation plumbed down to 0.
+As data flows through the layers, it is multiplied by small numbers (0.01). The activations quickly shrink to zero.
 
 ![5055](../img/cs231n/winter2016/5055.png)
 
-Why is this an issue?
-## Think about the dynamics of the backward pass, to the gradients, when you have tiny numbers in the activations what do these gradients on these weights look like?
+Why is this bad? During backpropagation, the gradient on the weights is $X \times dL/df$. If the input $X$ (the activation from the previous layer) is tiny, the gradient will be tiny. The network will not learn.
 
 ![5056](../img/cs231n/winter2016/5056.png)
 
-Tiny X's will make the gradient really small.
-
-When you multiply by W at every single layer, the gradients will just go to really small number.
-
-What if we initialized with $1$ instead of $0.01$ ?
+#### Large Random Numbers
+What if we use larger weights? `W = 1.0 * np.random.randn(D, H)`.
 
 ![5057](../img/cs231n/winter2016/5057.png)
 
-Now we have overshot the other way LOL. Everything is completely saturated. All the neurons are either 1 or -1.
+Now the neurons saturate. Tanh outputs become -1 or +1. The gradients become zero. The network does not learn.
 
-You die. You can train for very long time and you can see that loss is not moving at all. Because nothing is back propagating because all neurons are saturated and nothing is being updated.
-# The Xavier Initialization!
-
-Based on number input number, weight initialization changes.
-
-- If you have a lots of input and you will end up with lower weights.
-- If you have less inputs and your weights will be large.
-
-In the notes there is text about how this is derived. This is reasonable.
-
-But this paper  has the flaw of not taking into account tanh() 
+#### Xavier Initialization
+We want the variance of the input to be the same as the variance of the output.
+Glorot and Bengio (2010) derived a formula for this:
+`W = np.random.randn(fan_in, fan_out) / np.sqrt(fan_in)`
 
 ![5058](../img/cs231n/winter2016/5058.png)
 
-When we try with ReLU, it does not work at all.
+This keeps the activations well-scaled across many layers.
 
 ![5059](../img/cs231n/winter2016/5059.png)
 
-Someone pointed out, you are missing out an factor of 2. 
-
-> ReLU neurons half your variance each time.
-
-When you use this factor of 2, things build nicely.
+However, this derivation assumes linear activations. If we use **ReLU**, it breaks. ReLU kills half the variance (sets negative values to 0).
 
 ![5060](../img/cs231n/winter2016/5060.png)
 
-You have to be careful with initialization.
+#### He Initialization
+He et al. (2015) corrected this for ReLU by adding a factor of 2.
+`W = np.random.randn(fan_in, fan_out) / np.sqrt(fan_in / 2)`
 
 ![5061](../img/cs231n/winter2016/5061.png)
 
-This is the proper way. Xaiming He with factor of 2.
+This is the current standard for initializing ReLU networks.
 
 ![5062](../img/cs231n/winter2016/5062.png)
 
-There is also a data driven approach for initialization too.
-
 ---
-## There is a technique that alleviates a lot of this problems.
 
-# Batch Normalization
+### Batch Normalization
 
-----
-### Explained in assignment python notebook: ## 😍 
+PS: This is explained in more detail in assignment 2.
 
-To understand the goal of batch normalization, it is important to first recognize that ==machine learning methods tend to perform better with input data consisting of uncorrelated features with zero mean and unit variance. ==
-
-When training a neural network, we can preprocess the data before feeding it to the network to explicitly decorrelate its features. 
-
-This will ensure that the first layer of the network sees data that follows a nice distribution. 
-
-However, even if we preprocess the input data, the activations at deeper layers of the network will likely no longer be decorrelated and will no longer have zero mean or unit variance, since they are output from earlier layers in the network. 
-
-Even worse, during the training process the distribution of features at each layer of the network will shift as the weights of each layer are updated.
-
-The authors of BN paper hypothesize that the shifting distribution of features inside deep neural networks may make training deep networks more difficult. 
-
-To overcome this problem, they propose to insert into the network layers that normalize batches. At training time, such a layer uses a mini-batch of data to estimate the mean and standard deviation of each feature. 
-
-These estimated means and standard deviations are then used to center and normalize the features of the mini-batch. A running average of these means and standard deviations is kept during training, and at test time these running averages are used to center and normalize features.
-
-It is possible that this normalization strategy could reduce the representational power of the network, since it may sometimes be optimal for certain layers to have features that are not zero-mean or unit variance. 
-
-To this end, the batch normalization layer includes learnable shift and scale parameters for each feature dimension. 
-  
-----
-
-This helps a lot. Basic idea is, you can make things unit Gaussian because it is a completely differentiable function. You can back propagate through it.
+Batch Normalization (Ioffe & Szegedy, 2015) is a technique to explicitly force the activations to be unit gaussian throughout the network.
 
 ![5063](../img/cs231n/winter2016/5063.png)
 
-N examples (mini batch) going through network, D features / activations of neurons, X makes sure every single column is normalized. 
 
-By subtracting and dividing stuff.
+**The Idea**:
+For each feature dimension, compute the mean and variance over the current mini-batch, then normalize.
+
+$$\hat{x} = \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}}$$
 
 ![5064](../img/cs231n/winter2016/5064.png)
-# Normally we had Fully Connected followed by non linearity (tanh - relu)
 
-### Now we have BN layers right after FC layers.
-
-## These BN's make sure everything is roughly unit Gaussian at every single step of the network (by normalizing them).
+We typically insert this layer after the Fully Connected or Convolutional layer, and *before* the non-linearity.
 
 ![5065](../img/cs231n/winter2016/5065.png)
 
-A small patch on top of it. Allow the network to be able to shift and scale the bump.
+However, we don't want to constrain the network too much. We add learnable parameters $\gamma$ (scale) and $\beta$ (shift) so the network can learn to undo the normalization if it needs to.
 
-Back propagation can take over and finetune over time.
+$$y = \gamma \hat{x} + \beta$$
+
+**At Test Time**:
+We don't use the batch mean/variance. Instead, we use a running average of mean/variance collected during training.
 
 ![5066](../img/cs231n/winter2016/5066.png)
-### Several nice properties of Batch Norm. 🥰
 
-- Reduces the strong independence of initialization.
-- Reduces the need for dropout and seems to actually help.
+**Benefits**:
+
+-   Reduces sensitivity to initialization.
+
+-   Allows higher learning rates.
+
+-   Acts as a regularizer.
 
 ![5067](../img/cs231n/winter2016/5067.png)
-
-At test time, you nu and sigma can be a running sum  in training and remember that in test time.
 
 ![5068](../img/cs231n/winter2016/5068.png)
 
 It is good thing to use. But there is a runtime penalty.
 
-----
-### Tip: Layer Normalization 🐘
-
-Batch normalization has proved to be effective in making networks easier to train, but the dependency on batch size makes it less useful in complex networks which ==have a cap on the input batch size due to hardware limitations==. 
-
-Several alternatives to batch normalization have been proposed to mitigate this problem; one such technique is Layer Normalization. 
-
-Instead of normalizing over the batch, we normalize over the features. In other words, when using Layer Normalization, each feature vector corresponding to a single data-point is normalized based on the sum of all terms within that feature vector.
+**Layer Normalization**:
+A related technique is Layer Normalization, which normalizes across the features for a single example, rather than across the batch. This is useful for RNNs or when batch sizes are small.
 
 ![batchNorm layerNorm](../img/cs231n/winter2016/batchNorm_layerNorm.png)
-### Simple Definitions
 
-- **Batch Normalization** is normalizing the inputs to each batch of data by subtracting the mean and dividing by the standard deviation. This helps to stabilize the inputs to each layer, reduce the internal covariate shift, and enable faster and more stable training of deep neural networks. Batch normalization is typically applied to the inputs of each batch of data, hence the name "batch" normalization. It is often used in conjunction with other techniques such as convolutional neural networks (CNNs) and recurrent neural networks (RNNs).
+---
 
-- **Layer Normalization** is normalizing the inputs across the features (or neurons) within a layer, rather than across the batch dimension. This helps to stabilize the inputs to each layer, reduce the internal covariate shift, and enable faster and more stable training of deep neural networks. Layer normalization is often used in recurrent neural networks (RNNs) and transformer models, where the inputs to each layer may have varying lengths and dimensions.
+### Babysitting the Learning Process
 
-----
+Now we look at the practical steps of monitoring training.
 
 ![5069](../img/cs231n/winter2016/5069.png)
 
-We did the classic.
+**Step 1: Preprocessing:**
+Zero-center your data.
 
 ![5070](../img/cs231n/winter2016/5070.png)
 
-CIFAR-10. 2 FC, 50 neurons.
+**Step 2: Architecture:**
+Choose your architecture (e.g., 2-layer net, 50 hidden neurons).
 
 ![5071](../img/cs231n/winter2016/5071.png)
 
-Initialize 2 layer network. Really small network, we can start randomly. We have 10 classes we are using Softmax loss.
-$$2.3 = -log(1/10)$$
+**Step 3: Double Check the Loss:**
+Disable regularization. The loss should be around $-\log(1/C)$ where $C$ is the number of classes.
+For CIFAR-10 ($C=10$), loss should be $\approx 2.3$.
+
 ![5072](../img/cs231n/winter2016/5072.png)
 
-Expect the loss to go up.
+If you add regularization, the loss should go up.
 
 ![5073](../img/cs231n/winter2016/5073.png)
 
-Good sanity check. Take a small piece of your data, make sure you can over fit. 
+**Step 4: Sanity Check (Overfit Small Data):**
+Take a tiny subset of data (e.g., 20 examples). Turn off regularization. Train.
+You should be able to get 100% accuracy and loss of 0.
 
 ![5074](../img/cs231n/winter2016/5074.png)
 
-Loss can go to 0, Accuracy is 100.
-
 ![5075](../img/cs231n/winter2016/5075.png)
 
-Do not scale up to your full dataset before you can pass the sanity check.
+If you can't overfit a small dataset, your model is broken.
+
+**Step 5: Find Learning Rate:**
+Now use the full dataset (with small regularization). Start with a small learning rate.
 
 ![5076](../img/cs231n/winter2016/5076.png)
-# What is the learning rate that works ? 
+
+If the loss doesn't go down, the learning rate is too low.
 
 ![5077](../img/cs231n/winter2016/5077.png)
 
-We can assume the $1e-6$ learning rate was too low.
-
 ![5078](../img/cs231n/winter2016/5078.png)
 
-Did you catch that ? Loss barely went down but  accuracy is so good. How ?
+Notice that loss barely changes, but accuracy jumps? This is because weights are shifting slightly to make correct scores just barely higher.
 
 ![5079](../img/cs231n/winter2016/5079.png)
 
-You start out with fewest scores, when your correct answers become a tiny bit more probable, the accuracy goes up.
+If the learning rate is too high, the loss explodes (NaN).
 
 ![5080](../img/cs231n/winter2016/5080.png)
 
-Huge learning rate, gives errors.
-
 ![5081](../img/cs231n/winter2016/5081.png)
 
-What is the ideal learning rate.
+You want to find a learning rate that is "just right" (roughly in the range [$1e^{-3}$, $1e^{-5}$]).
 
 ![5082](../img/cs231n/winter2016/5082.png)
 
 ![5083](../img/cs231n/winter2016/5083.png)
 
-Find the best hyperparameters for the network.
+---
+
+### Hyperparameter Optimization
+
+We need to find the best hyperparameters (Learning Rate, Regularization, Dropout, etc.).
 
 ![5084](../img/cs231n/winter2016/5084.png)
-## Do coarse -> fine
+
+**Strategy: Coarse to Fine**
+First, search a wide range for a few epochs.
 
 ![5085](../img/cs231n/winter2016/5085.png)
-# tip: it is best to optimize in log space! 😍
 
-Because the learning rate is a multiplicative interaction. If we had a linear space, most of the samples would be in a bad region.
+**Tip**: Optimize in **Log Space**.
+Learning rates and regularization strengths are multiplicative. Sample exponents uniformly from a range.
+`10 ** uniform(-3, -6)`
 
 ![5086](../img/cs231n/winter2016/5086.png)
 
-Do a finer search now.
+Once you find a good region, narrow the search and run for longer.
 
 ![5087](../img/cs231n/winter2016/5087.png)
 
-This is worrying, why? If there is a best result in the edge, we might have to adjust the range.
+**Random Search vs. Grid Search**
+Always use Random Search.
 
 ![5088](../img/cs231n/winter2016/5088.png)
-## You can grid search instead of random sampling, but this is not good.
 
-Some of the hyperparameters are much more important than others.
-# Tip: always use random.
+Grid search is inefficient because some hyperparameters are more important than others. Random search explores more unique values for the important parameters.
 
 ![5089](../img/cs231n/winter2016/5089.png)
 
-This is so much fun.
+**Visualizing Results**
+Plot your results.
 
 ![5090](../img/cs231n/winter2016/5090.png)
 
-You cannot spray and pray LOL.
+You cannot spray and pray :).
 
 ![5091](../img/cs231n/winter2016/5091.png)
 
-We might want to consider a bigger learning rate.
+If your best results are on the edge of your search range, you need to shift the range!
 
 ![5092](../img/cs231n/winter2016/5092.png)
 
 ![5093](../img/cs231n/winter2016/5093.png)
 
-Suddenly starts training.
-
 ![5094](../img/cs231n/winter2016/5094.png)
-## _lossfunctions.tumblr.com_ LOL 
+
+### Evaluation
+
+Monitor your loss curves.
 
 ![5095](../img/cs231n/winter2016/5095.png)
 
+(Check out lossfunctions.tumblr.com for examples of loss curves).
+
 ![5096](../img/cs231n/winter2016/5096.png)
 
-We gotta also need to look at accuracy.
+Monitor the gap between training and validation accuracy.
 
-Accuracy is absolutely interpretable.
+-   Big gap = Overfitting (increase regularization).
+
+-   No gap = Underfitting (increase model capacity).
 
 ![5097](../img/cs231n/winter2016/5097.png)
 
-Tracking the difference between the scale of your parameters and the scale of your updates to your parameters.
-
-Based on this, you can decide to adjust your learning rate.
+**Weight:Update Ratio**
+Track the ratio of the update magnitude to the weight magnitude. It should be around $1e^{-3}$.
 
 ![5098](../img/cs231n/winter2016/5098.png)
 
-TLDR for today:
+### Summary
 
 ![5099](../img/cs231n/winter2016/5099.png)
 
-We will work on these in the next lecture.
+We have covered:
+
+- Activation Functions (use ReLU).
+
+- Data Preprocessing (zero-center).
+
+- Weight Initialization (use Xavier/He).
+
+- Batch Normalization (use it).
+
+- Hyperparameter Optimization (random search in log space).
 
 ![5100](../img/cs231n/winter2016/5100.png)
 
-Solid performance.
+In the next lecture, we will continue with parameter updates and more advanced training techniques.

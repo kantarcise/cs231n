@@ -1,19 +1,15 @@
 Part of [CS231n Winter 2016](../index.md)
 
 ---
-# From Andrej Karpathy ⛵
+## Lecture 7: Convolutional Neural Networks
 
-Going strong!
-
----
-
-2 weeks to go, on the Assignment 2.
+Two weeks to go on Assignment 2.
 
 ![7001](../img/cs231n/winter2016/7001.png)
 
-Project Proposal ? [About Project](http://cs231n.stanford.edu/project.html)
+Project Proposal? [About Project](http://cs231n.stanford.edu/project.html)
 
-The 4 step process is still there.
+The four-step process is still relevant.
 
 ![7002](../img/cs231n/winter2016/7002.png)
 
@@ -21,127 +17,133 @@ How did we update parameters?
 
 ![7003](../img/cs231n/winter2016/7003.png)
 
-Dropout is just casually dropped by Geoffrey Hinton.
+Dropout was casually introduced by Geoffrey Hinton.
 
 ![7004](../img/cs231n/winter2016/7004.png)
 
-LeNet is the classic.
+LeNet is a classic architecture.
 
 ![7005](../img/cs231n/winter2016/7005.png)
 
-Hubel and Wiesel.
+Hubel and Wiesel's experiments.
 
 ![7006](../img/cs231n/winter2016/7006.png)
 
-Featural hierarchy.
+Feature hierarchy.
 
 ![7007](../img/cs231n/winter2016/7007.png)
 
 ![7008](../img/cs231n/winter2016/7008.png)
 
-We start with an image $32x32x3$ CIFAR-10 image. 
+We start with a $32x32x3$ CIFAR-10 image.
 
-3 Channels, the volume of activations is 3 deep. This is just 3rd dimension of a volume.
+It has 3 channels, so the volume of activations is 3 deep. This corresponds to the 3rd dimension of the volume.
 
 ![7009](../img/cs231n/winter2016/7009.png)
 
-**Convolutional Layer** a core building block. 
+**Convolutional Layer**: A core building block.
 
-A filter With 3 depth, we will cover the full depth of the input volume. But $5x5$ -> spatially small.
+A filter with a depth of 3 will cover the full depth of the input volume. However, it is spatially small ($5x5$).
 
 ![7010](../img/cs231n/winter2016/7010.png)
 
-We always extend the full depth of the input volume.
+We always extend through the full depth of the input volume.
 
 ![7011](../img/cs231n/winter2016/7011.png)
 
-We will learn $w$. We are going to slide the filter on input volume.
+We will learn $w$. We are going to slide the filter over the input volume.
 
-As we slide, we are making 75 dimensional dot product.
+As we slide, we perform a 75-dimensional dot product.
 
 ![7012](../img/cs231n/winter2016/7012.png)
 
-This sliding will result in an **activation map.** 
-## why activation map is smaller ? 
+This sliding process results in an **activation map**.
 
-Because we are starting from index 0 to 4 on the input image, we can put the filter on 28x28 distinct locations.
+#### Activation Map Size
+
+Because we slide the filter from index 0 to 4 on the input image, we can place the filter in 28x28 distinct locations.
 
 ![7013](../img/cs231n/winter2016/7013.png)
 
-We will actually have a filter bank. Different filter will result in different activation maps.
+We will actually have a filter bank. Different filters will result in different activation maps.
 
 ![7014](../img/cs231n/winter2016/7014.png)
 
-6 filters will result 6 activation maps.
+6 filters will result in 6 activation maps.
 
 ![7015](../img/cs231n/winter2016/7015.png)
-## a new image, smaller sized! 😮
 
-After all the convolutions, we will have an new image that is sized $28x28x6$ ! 
+#### Output Dimensions
+
+After all the convolutions, we will have a new image sized $28x28x6$!
 
 ![7016](../img/cs231n/winter2016/7016.png)
 
-We will have these convolutional layers, they will have some number of filters. And these filters will have some special extend (5x5). This conv layer will slide on input and result the new image. This will be followed by ReLu and other conv layer.
+We will have these convolutional layers, which will have a certain number of filters. These filters will have a specific spatial extent (e.g., 5x5). This conv layer will slide over the input and produce a new image. This will be followed by a ReLU and another conv layer.
 
 ![7017](../img/cs231n/winter2016/7017.png)
 
-The filters now have to be $5x5x6$. 
-### Always match the input depth!
+The filters now have to be $5x5x6$.
 
-These filters are initialized randomly. They will become our parameters in out ConvNet.
+#### Input Depth Matching
+
+These filters are initialized randomly. They will become the parameters in our ConvNet.
 
 ![7018](../img/cs231n/winter2016/7018.png)
 
-When you look at the trained layer, first layers are low level features, color pieces, edges pieces and blobs. 
+When you look at the trained layers, the first layers represent low-level features: color pieces, edges, and blobs.
 
-First layers will be looking for these things in the input image as we convolve through.
+The first layers will look for these features in the input image as we convolve through it.
 
-As you go deeper, we are performing conv on top of conv, it will be doing dot product over the outputs of the first conv layer.
+As you go deeper, we perform convolution on top of convolution, doing dot products over the outputs of the previous conv layer.
 
-It will be putting together all the color / edge pieces, and making larger and larger pieces out of it, which the neurons will be excited about.
+It will put together all the color/edge pieces, making larger and larger features that the neurons will respond to.
 
-For example, mid level will be looking for circles.
+For example, mid-level layers might look for circles.
 
-And in the end, we will be building all of the object templates, high level feature.
+And in the end, we will build object templates and high-level features.
 
-In the left most picture, these are raw weights ($5x5x3$ array).
+In the leftmost picture, these are raw weights ($5x5x3$ array).
 
-In the middle and in the left, these are just visualizations that those layers are responding to, in the original image.
+In the middle and right, these are visualizations of what those layers are responding to in the original image.
 
 ![7019](../img/cs231n/winter2016/7019.png)
 
-This is pretty similar to Hubel and Wiesel imagined. A bar of a specific orientation -> more complex features.
+This is pretty similar to what Hubel and Wiesel imagined: a bar of a specific orientation leads to more complex features.
 
 ![7020](../img/cs231n/winter2016/7020.png)
 
-Small piece of a car, as an input. 
+A small piece of a car as input.
 
-32 filters of 5 by 5 in the first convolutional layer.
+32 filters of size 5x5 in the first convolutional layer.
 
-Down below is the example activation maps. ==White== corresponds to high activation, ==black== corresponds to low activations, low numbers. 
+Below are example activation maps. **White** corresponds to high activation, and **black** corresponds to low activation (low numbers).
 
-In the blue arrow there is an orange stuff in the image, so the activation will show that the filter is happy about that part.
+Where the blue arrow points to orange stuff in the image, the activation shows that the filter is **happy** about that part.
 
 ![7021](../img/cs231n/winter2016/7021.png)
 
-A layout like this. 
-## 3 core building blocks. - `conv` - `relu` - `pool` 
+A layout like this:
 
-Also, Fully connected layer in the end.
+### Architecture Overview
 
-Every row is a activation map. Every column is an operation.
-## ReLU is non linearity - thresholding ? 
+Also, a Fully Connected layer at the end.
 
-Image feeds into left side, we do convolution, thresholding (ReLU) - we do another Conv, we do ReLU, we do pooling..
+Every row is an activation map. Every column is an operation.
 
-Piece by piece we are making this 3D volumes of higher and higher abstraction. We end up with a volume, connected to a large FC layer.
+#### ReLU Layer
 
-Last matrix multiply will get us the class scores.
+The image feeds into the left side. We do convolution, thresholding (ReLU), then another Conv, another ReLU, then pooling...
+
+Piece by piece, we create these 3D volumes of higher and higher abstraction. We end up with a volume connected to a large FC layer.
+
+The last matrix multiplication will give us the class scores.
 
 ![7022](../img/cs231n/winter2016/7022.png)
-## how do we decide the number of filters? 🤔
 
-Only concerned about spatial dimensions at this point.
+#### Filter Count
+
+We are only concerned about spatial dimensions at this point.
 
 ![7023](../img/cs231n/winter2016/7023.png)
 
@@ -161,43 +163,45 @@ One at a time.
 
 ![7027](../img/cs231n/winter2016/7027.png)
 
-We can do a stride 2 - which is a hyperparameter.
+We can use a stride of 2, which is a hyperparameter.
 
 ![7028](../img/cs231n/winter2016/7028.png)
 
-We moved two at a time.
+We move two steps at a time.
 
 ![7029](../img/cs231n/winter2016/7029.png)
 
-We are done in less steps!
+We are done in fewer steps!
 
 ![7030](../img/cs231n/winter2016/7030.png)
 
-Can we do stride 3?
+Can we use a stride of 3?
 
 ![7031](../img/cs231n/winter2016/7031.png)
 
-Yeah, we cannot.
+No, we cannot.
 
 ![7032](../img/cs231n/winter2016/7032.png)
 
-This simple formula will give you possible selections. The formula should always give integer. 
+This simple formula gives you possible selections. The result should always be an integer.
 
 ![7033](../img/cs231n/winter2016/7033.png)
 
-We can pad! Padding is also a hyperparameter!
+We can pad! Padding is also a hyperparameter.
 
 ![7034](../img/cs231n/winter2016/7034.png)
 
-If we pad with 1, we can get the same sized output.
-## Sizes are preserved spatially 🌉
+If we pad with 1, we can get an output of the ***same size***.
+
+#### Spatial Preservation
 
 ![7035](../img/cs231n/winter2016/7035.png)
-### We might have bigger filters! In practice, pad with $(F-1)/2$.
+
+#### Padding Strategy
 
 ![7036](../img/cs231n/winter2016/7036.png)
 
-If we do not pad, the size will shrink! We do not want that, we will have a lot of layers.
+If we do not pad, the size will shrink! We do not want that, as we will have many layers.
 
 ![7037](../img/cs231n/winter2016/7037.png)
 
@@ -205,110 +209,125 @@ If we do not pad, the size will shrink! We do not want that, we will have a lot 
 
 ![7038](../img/cs231n/winter2016/7038.png)
 
-Padding is correct, so the spatial size will not change. 
+The padding is correct, so the spatial size will not change.
 
 10 filters will generate 10 different activation maps.
 
-Output is : $32x32x10$ shaped.
+The output is shaped $32x32x10$.
 
 ![7039](../img/cs231n/winter2016/7039.png)
 
-Parameters?
+#### Parameter Counting
 
 ![7040](../img/cs231n/winter2016/7040.png)
 
-Each filter has $5*5*3$ parameters, and a single bias. So the result will be $$10 * 76 = 760$$
+Each filter has $5*5*3$ parameters plus a single bias. So the total is $10 * 76 = 760$.
+
 ![7041](../img/cs231n/winter2016/7041.png)
 
 Here is the summary so far:
 
 ![7042](../img/cs231n/winter2016/7042.png)
-## 4 hyperparameters for filters:
+
+#### Filter Hyperparameters
 - Number of filters
-- the spatial extent of the filters
-- the stride
-- number of zero padding
+- The spatial extent of the filters - $F$
+- The stride - $S$
+- The amount of zero padding - $P$
 
 ![7043](../img/cs231n/winter2016/7043.png)
 
-We can compute the size of the activation output with the formula. The depth will be the number of filters. $F$ is usually odd.
+We can compute the size of the activation output with the formula. The depth will be the number of filters $K$. $F$ is usually odd.
 
-Total number of parameters will depend on input depth, filters size and bias.
+The total number of parameters will depend on input depth, filter size, and bias.
 
-K is usually chosen as a powers of 2, for computational reasons. Some libraries go into special subroutines when the see powers of 2.
+$K$ is usually chosen as a power of 2 for computational reasons. Some libraries use special subroutines when they see powers of 2.
 
 ![7044](../img/cs231n/winter2016/7044.png)
 
-We can use $1x1$ convolutions. You are still doing a lot of computation, you are just not merging information spatially.
-## why not pad something other than 0? You want to ignore that part.
+We can use $1x1$ convolutions. You are still doing a lot of computation; you are just not merging information spatially.
 
-### Are we always working with squares? - We always resize to squares.
+#### Zero Padding Rationale
 
-We will see how to work with non rectangular images.
+#### Non-Square Inputs
+
+We will see how to work with non-rectangular images later.
 
 ![7045](../img/cs231n/winter2016/7045.png)
-## kernel and filter interchangeable 🎋
 
-API of `SpatialConvolution` in Torch. 
-- Input plane is the depth of input layer.
-- Output plane is how many filters you have
-- kw - kH - kernel width 
-- dW - dH - step means stride
-- pad - what padding you want.
+#### Terminology
+
+The API of `SpatialConvolution` in Torch:
+
+- `nInputPlane`: The depth of the input layer.
+
+- `nOutputPlane`: How many filters you have.
+
+- `kW`, `kH`: Kernel width and height.
+
+- `dW`, `dH`: Step size (stride).
+
+- `padW`, `padH`: The padding you want.
+
+> This is referring to Lua Torch (Torch7), which was the predecessor to the modern PyTorch, with this [Conv2d class here](https://docs.pytorch.org/docs/stable/generated/torch.nn.Conv2d.html).
 
 ![7046](../img/cs231n/winter2016/7046.png)
 
-Same in `Caffe`.
+It is the same in `Caffe`.
 
 ![7047](../img/cs231n/winter2016/7047.png)
 
-Same in `Lasagne`.
-## Let's go into brain view now. 🧠
+It is the same in `Lasagne`.
+
+### Biological Perspective
 
 ![7048](../img/cs231n/winter2016/7048.png)
 
-With This filter, We end up with 1 number in a convolution.
+With this filter, we end up with one number in a convolution.
 
 ![7049](../img/cs231n/winter2016/7049.png)
 
-Output of the filter at this position is just a neuron that is fixed in space, and it happens to be looking to a small part of the input, and it is computing $w^T*x + b$ 
- 
-It has no connections to the other parts of the image, so local connectivity. 
+The output of the filter at this position is just a neuron fixed in space, looking at a small part of the input, computing $w^T x + b$.
+
+It has no connections to other parts of the image, hence local connectivity.
 
 ![7050](../img/cs231n/winter2016/7050.png)
 
-We sometimes say neurons receptive field - as the same size of filter (region of the input the filter is looking at).
+We sometimes refer to the neuron's receptive field as the size of the filter (the region of the input the filter is looking at).
 
-In a single activation map, 28x28 grid, these neurons share parameters (because one filter is computing all the outputs) so all the neurons have the same weight $w$
-## They have shared weights spatially and local connectivity. 🍒
+In a single activation map (28x28 grid), these neurons share parameters (because one filter computes all the outputs), so all the neurons have the same weights $w$.
 
-We have several filters, so ==spatially they are sharing weights==, but across ==depth== these are all different neurons.
+#### Weight Sharing
+
+We have several filters, so **spatially they share weights**, but across **depth**, these are all different neurons.
 
 ![7051](../img/cs231n/winter2016/7051.png)
 
-Nice advantage of both local connectivity and parameter spatial sharing is that, that is basically controlling the capacity of the model.
+A nice advantage of both local connectivity and spatial parameter sharing is that it basically controls the capacity of the model.
 
-It makes sense that neurons would want compute similar things, say they are looking for edges, you might imagine that a vertical edge in the middle of an image is just as useful anywhere else spatially.
+It makes sense that neurons would want to compute similar things. For example, if they are looking for edges, a vertical edge in the middle of an image is just as useful anywhere else spatially.
 
-It makes sense, as a way of controlling overfitting to share those parameters spatially.
+It makes sense to share those parameters spatially as a way of controlling overfitting.
 
 ![7052](../img/cs231n/winter2016/7052.png)
 
-We covered conv and ReLU layers.
-## Now the pooling layer 📏 - squishing
+We have covered Conv and ReLU layers.
+
+### Pooling Layer
 
 ![7053](../img/cs231n/winter2016/7053.png)
 
-The Conv layer will not shrink the spatial size.
+The Conv layer usually preserves the spatial size (with padding).
 
 The spatial shrinking is done by pooling.
-## why ??
 
-The most common is max polling.
+#### Motivation
+
+The most common method is max pooling.
 
 ![7054](../img/cs231n/winter2016/7054.png)
 
-Reduction of half on all activation maps. Average pooling will not work as well.
+It reduces the size by half on all activation maps. Average pooling does not work as well.
 
 ![7055](../img/cs231n/winter2016/7055.png)
 
@@ -317,74 +336,93 @@ We need to know the filter size and stride. $2x2$ with stride $2$ is common.
 ![7056](../img/cs231n/winter2016/7056.png)
 
 The depth of the volume does not change.
-## Fully Connected layer ? 
+
+### Fully Connected Layer
 
 ![7057](../img/cs231n/winter2016/7057.png)
 
-3 pooling layer, $2x2$  stride 2. We started by 32, 16, 8, 4
+With 3 pooling layers ($2x2$, stride 2), we go from 32 -> 16 -> 8 -> 4.
 
-At the end we have $4x4x10$ volume of activations after last pooling.
+At the end, we have a $4x4x10$ volume of activations after the last pooling.
 
 That goes into the Fully Connected layer.
-## Demo time! 🐤
 
-Website [here](https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html). 80 percent accuracy for CIFAR-10 on Javascript! 
+### Demo
 
-6 OR 7 nested loops. V8 engine in Chrome is good, so JS is fast.
+Website [here](https://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html). It achieves 80% accuracy for CIFAR-10 in JavaScript!
+
+It uses 6 or 7 nested loops. The V8 engine in Chrome is good, so JS is fast.
 
 ![7058](../img/cs231n/winter2016/7058.png)
 
 All running in the browser.
 
 ---
-#### Why is that we are stacking layers? 🤔 Because we want to do dot product, because we can back propagate on them efficiently.
 
-#### If you are working with image batches, all the volume between Convnet's are 4D arrays. If single image, 3D arrays.
+#### Stacking Layers
 
-#### Intermediate filters are not properly visualized. Yann LeCun did what the neurons are responding to. 
+Why is that we are stacking layers? 🤔
 
-#### How does pooling make sense we are losing the image??? When you do pooling, you are throwing away a bit of spatial information. Because you want to eventually get the scores out.
+Because we want to do dot products, and we can backpropagate through them efficiently.
 
-#### Because of padding, the statistics of border is different than center, we do not worry about it.
+#### Batch Dimensions
 
----
-## Anything you can back propagate through, you can put in a ConvNet / Neural Net.
+If you are working with image batches, all the volume between Convnet's are 4D arrays. If single image, 3D arrays.
 
-## All case studies coming up 💎:
+#### Visualization
 
-## LeNet-5
+Intermediate filters are not properly visualized. Yann LeCun did what the neurons are responding to. 
 
-Figure from paper. 6 filters all $5x5$ sub-sampling (max pooling).
+
+#### Pooling Rationale
+
+When you do pooling, you throw away some spatial information because you want to eventually get the scores out.
+
+#### Boundary Effects
+
+Because of padding, the statistics of border is different than center, we do not worry about it.
+
+### Backpropagation Compatibility
+
+Anything you can back propagate through, you can put in a ConvNet / Neural Net.
+
+### Case Studies
+
+#### LeNet-5
+
+Figure from the paper. 6 filters, all $5x5$, with sub-sampling (max pooling).
 
 ![7059](../img/cs231n/winter2016/7059.png)
-## AlexNet - 60 Million Parameters
 
-Won the ImageNet. 
+#### AlexNet
 
-Input is big. 
+It won the ImageNet challenge.  60 Million Parameters.
 
-Two separate streams ? Alex had to split the convolutions on 2 seperate GPU's.
+The input is large.
 
-Let's imagine if it had single stream. 
+Two separate streams? Alex had to split the convolutions onto 2 separate GPUs.
+
+Let's imagine if it had a single stream.
 
 ![7060](../img/cs231n/winter2016/7060.png)
 
-Output volume will be: $55x55x96$ 🐦 Because we have 96 kernels/filters.
+The output volume will be: $55x55x96$, because we have 96 kernels/filters.
 
 ![7061](../img/cs231n/winter2016/7061.png)
 
 Total parameters: every filter is $11x11x3$ x 96 roughly.
-## We are not even sure what Alex did.  😅
 
-The input on image is $224x224$, but for the math to add up the input should be $227x227$.
+We are not even sure what Alex did. 😅
+
+The input image is $224x224$, but for the math to add up, the input should be $227x227$.
 
 ![7062](../img/cs231n/winter2016/7062.png)
 
-After pooling ? half of spatial size so - $27x27x96$
+After pooling? Half of the spatial size, so $27x27x96$.
 
 ![7063](../img/cs231n/winter2016/7063.png)
 
-How many parameters in the pooling layer?
+How many parameters are in the pooling layer?
 
 ![7064](../img/cs231n/winter2016/7064.png)
 
@@ -392,7 +430,7 @@ How many parameters in the pooling layer?
 
 ![7065](../img/cs231n/winter2016/7065.png)
 
-Summarization:
+Summary:
 
 ![7066](../img/cs231n/winter2016/7066.png)
 
@@ -400,68 +438,85 @@ Full architecture:
 
 ![7067](../img/cs231n/winter2016/7067.png)
 
-This is a classic sandwich. Sometimes filter sizes change. We back propagate through all of this.
+This is a classic sandwich. Sometimes filter sizes change. We backpropagate through all of this.
 
 ![7068](../img/cs231n/winter2016/7068.png)
 
-First use of ReLU, used normalization layers (not used anymore), used dropout only on the last fully connected layers, 7 ensemble -> just train more models LOL.
-## ZFNet - 2013 Winner - Founded a company later - Clarifai
+First use of ReLU, used normalization layers (not used anymore), used dropout only on the last fully connected layers, and an ensemble of 7 models.
+
+#### ZFNet
 
 Built on top of AlexNet.
 
 $11x11$ stride 4 was too drastic, so they changed to $7x7$ filters.
 
-They used more filters in Conv 3- 4 -5.
+They used more filters in Conv 3, 4, and 5.
 
-Error become %14.8, the writer of this paper found a company called Clarify and reported %11 error.
-## what does top-5 error mean ? there are 1000 classes, we are giving 5 chances to the classifier to guess. 😌
+The error became 14.8%. The author of this paper founded a company called Clarifai and reported 11% error.
+
+Here is the [company about.](https://www.clarifai.com/company/about)
+
+> Founded in 2013 by Matthew Zeiler, Ph.D., a foremost expert in machine learning, Clarifai has been a market leader since winning the top five places in image classification at the ImageNet 2013 competition.
+
+**Top-5 Error**
+
+There are 1000 classes, and we give the classifier 5 chances to guess. 😌
 
 ![7069](../img/cs231n/winter2016/7069.png)
-## VGGNet - 140 Million Parameters - Used as a default, simple arch
 
-They have different types of architectures. They decided they will use a single set of filters, the question is:
-## How many tho ? 
+#### VGGNet
 
-Turns out, 16 layer performed the best. They dropped error to 7.3%
+140 Million Parameters. They have different types of architectures. They decided to use a single set of filters. The question is:
+
+**Layer Count**
+
+Turns out, 16 layers performed the best. They dropped the error to 7.3%.
 
 ![7070](../img/cs231n/winter2016/7070.png)
 
-This is all of the architecture:
-### Spatially the volumes get smaller, number of filters are increasing 💚
+This is the full architecture:
+
+**Spatial Reduction**
+
+Spatially the volumes get smaller, number of filters are increasing
 
 ![7071](../img/cs231n/winter2016/7071.png)
-### The memory?
+
+**Memory Usage**
 
 ![7072](../img/cs231n/winter2016/7072.png)
 
-If we add up all the numbers, 24 M if we are using floating points float32 - 93 MB of memory - intermediate activation volumes per image.
+If we add up all the numbers, it's 24M. If we use float32, that's 93 MB of memory for intermediate activation volumes per image.
 
-That is just maintained on memory because we need it on backpropogation. 
+That is maintained in memory because we need it for backpropagation.
 
-Just to represent 1 image, it takes 93 MB of RAM ONLY for FORWARD pass - for backward pass we also need the gradients - which we will end up with 200 MB of footprint.
-### Total number of parameters is 138 Million. 
+Just to represent 1 image, it takes 93 MB of RAM ONLY for the FORWARD pass. For the backward pass, we also need the gradients, so we end up with a 200 MB footprint.
 
-### Most memory is in early Conv, most parameters are in late FC. 
+**Parameter Count**
 
-We found that this huge parametered Fully Connected layers are not necessary. 
-### We can do average pooling!  😮
+Most memory is in early Conv layers; most parameters are in late FC layers.
 
-Instead of FC'ing on $7x7x512$ you can average on $7x7$ and make it a single $1x1x512$ , which works just as well.
-## GoogleNet 🍉 - Only 5 Million Parameters
+We found that these huge Fully Connected layers are not necessary.
 
-Key innovation here was, **Inception** module. Instead of using Direct Convolutions, they used inception modules.
+**Average Pooling**
 
-A sequence of inception modules are in GoogleNet. You can read the paper.
+Instead of FC on $7x7x512$, you can average on $7x7$ and make it a single $1x1x512$, which works just as well.
 
-It win 2014 challenge with 6.7%. 
- 
+#### GoogleNet
+
+The key innovation here was the **Inception** module. Instead of using direct convolutions, they used inception modules.
+
+A sequence of inception modules makes up GoogleNet. You can read the paper.
+
+It won the 2014 challenge with 6.7% error.
+
 ![7073](../img/cs231n/winter2016/7073.png)
 
-At the very end they had $7x7x1024$ and they did an average pool!
+At the very end, they had $7x7x1024$ and they did an average pool! That means much fewer parameters!
 
-That means Much less parameters!
 ![7074](../img/cs231n/winter2016/7074.png)
-## ResNet - 2015 Kaiming He - They won bunch of competitions.
+
+#### ResNet
 
 ![7075](../img/cs231n/winter2016/7075.png)
 
@@ -469,62 +524,67 @@ Here is what the history looks like.
 
 ![7076](../img/cs231n/winter2016/7076.png)
 
-More layers.
+More layers. You have to be careful how you increase the number of layers.
 
-You have to be careful how you increase the number of layers,
-## Plain Nets 🆚 ResNets ?
+**Plain vs ResNets**
 
-56 layer performs worst than 44 layer, what ?
+A 56-layer network performs worse than a 44-layer network. Why?
 
-In ResNets, number of layers will always result of better results.
+In ResNets, increasing the number of layers will always result in better results.
 
 ![7077](../img/cs231n/winter2016/7077.png)
-## At Runtime, it is actually faster than a VGGnet  - how ??
+
+**Runtime Performance**
+
+At Runtime, it is actually faster than a VGGnet  - how ?
 
 ![7078](../img/cs231n/winter2016/7078.png)
 
-This is a plain net down below:
+This is a plain net below:
 
 We will have skip connections.
 
-You take a $224x224$ image, you pool by a huge factor, spatially working on $56x56$, still really good.
-## Depth at the cost of spatial resolution, very early on. Because depth is to their advantage.
+You take a $224x224$ image, pool by a huge factor, and work spatially on $56x56$. It's still really good.
+
+Depth comes at the cost of spatial resolution very early on, because depth is to their advantage.
 
 ![7079](../img/cs231n/winter2016/7079.png)
 
-In a plain net, you have some function $f(x)$ you are trying to compute, you would transform your representation, you have a weight layer, you threshold it and so on..
+In a plain net, you have some function $f(x)$ you are trying to compute. You transform your representation, have a weight layer, threshold it, and so on.
 
-In a ResNet, your input flows in, but instead of computing how you transfer your input into $f(x)$, you are computing what to add to your input to transform it into $F(x)$.
+In a ResNet, your input flows in. But instead of computing how to transform your input into $f(x)$, you compute what to add to your input to transform it into $F(x)$.
 
-Computing a delta on top of your original representation instead of a new representation right away, which will be discarding the original information about original X.
-## THIS IS LIKE DELTA MODULATION.
+You compute a delta on top of your original representation instead of a new representation right away, which would discard the original information about $X$.
+
+**Delta Modulation Analogy**
 
 > In analogy, you can think of delta modulation as encoding the difference between successive samples (input and output), somewhat akin to how the ResNet architecture focuses on learning the residual (difference) between input and output to improve learning efficiency. Both methods leverage this residual information for better representation or reconstruction.
 
-You are computing just these delta's to these x's. 
+You are computing just these deltas to these $x$'s.
 
-If you think about the gradient flow, in a ResNet, when a gradient comes, it is doing addition (remember the addition is just doing distribution of gradient to all of it's children) the gradient will flow to top, skipping over the straight part.
+If you think about the gradient flow in a ResNet, when a gradient comes, it performs addition (remember, addition distributes the gradient to all of its children). The gradient will flow to the top, skipping over the straight part.
 
 ![7080](../img/cs231n/winter2016/7080.png)
 
-You can train, right away really close to the image, to the first Conv Layer.
+You can train right away, really close to the image, to the first Conv Layer.
 
 ![7081](../img/cs231n/winter2016/7081.png)
 
 These are the commonly used hyperparameters.
+
 - Batch norm layers will allow you to get away with a bigger learning rate.
 
 ![7082](../img/cs231n/winter2016/7082.png)
 
-Using $1x1$ Convs in clever ways.
+- Using $1x1$ Convs in clever ways.
 
 ![7083](../img/cs231n/winter2016/7083.png)
 
-This is the whole architecture, Andrej skipped it in the interest of time.
+This is the whole architecture; Andrej skipped it in the interest of time.
 
 ![7084](../img/cs231n/winter2016/7084.png)
 
-This was in the Cover of AlphaGo.
+This was on the cover of AlphaGo.
 
 ![7085](../img/cs231n/winter2016/7085.png)
 
@@ -532,13 +592,14 @@ This was a convolutional network!
 
 ![7086](../img/cs231n/winter2016/7086.png)
 
-The input is $19x19x48$ because they are using 48 different features on specifics on rules of GO. You can kinda understand what is going on when you read the paper.
+The input is $19x19x48$ because they are using 48 different features based on the specific rules of Go. You can understand what is going on when you read the paper.
 
-Other GO Deep-learning player: https://www.remi-coulom.fr/CrazyStone/
+Other Go Deep Learning player: [CrazyStone](https://www.remi-coulom.fr/CrazyStone/)
 
 ![7087](../img/cs231n/winter2016/7087.png)
 
-- Trend is to get rid of Pooling and Fully Connected Layers.
+- The trend is to get rid of Pooling and Fully Connected Layers.
+
 - Smaller filters and deeper architectures.
 
-Done!
+Done with lecture 7!

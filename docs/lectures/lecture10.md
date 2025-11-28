@@ -425,8 +425,6 @@ These hidden cells are always between $-1$ and $1$, the scale between blue and r
 
 ----
 
-TODO, continue editing from here.
-
 ### RNNs in Computer Vision
 
 #### Image Captioning
@@ -455,7 +453,7 @@ We plug it into a CNN; this is a `VGGnet`. We go through Conv and MaxPools until
 
 ![10053](../img/cs231n/winter2016/10053.png)
 
-We would normally have this softmax classifier that gives us a probability distribution over 1000 classes in ImageNet. We are going to ==remove that classifier==.
+We would normally have this softmax classifier that gives us a probability distribution over 1000 classes in ImageNet. We are going to ***remove that classifier***.
 
 ![10054](../img/cs231n/winter2016/10054.png)
 
@@ -465,7 +463,7 @@ We are going to redirect the representation at the top of the network into the R
 
 We begin with a special start vector. The input at this RNN is roughly 300-dimensional.
 
-At the first iteration, we always use this special vector. Then we perform the ==recurrence formula== as we saw in Vanilla RNN.
+At the first iteration, we always use this special vector. Then we perform the **recurrence formula** as we saw in Vanilla RNN.
 
 Normally we would compute the before mode. Now we are doing something different. Not only with the current input and current hidden state (which we initialized with 0 - that term goes away at the first timestep).
 
@@ -477,21 +475,21 @@ There are many ways to do this plugin. This is only one of them. One of the simp
 
 **Mechanism**
 
-The ==straw== textures can be recognized by the CNN as straw-like stuff.
+The **straw** textures can be recognized by the CNN as straw-like stuff.
 
-Through this interaction of $W_{ih}$, it might condition the hidden state to a particular state where the probability of the word ==straw== can be slightly higher.
+Through this interaction of $W_{ih}$, it might condition the hidden state to a particular state where the probability of the word **straw** can be slightly higher.
 
-So you can imagine the textures of an image can influence the word "straw", causing one of the numbers inside $y0$ to be higher because there are straw textures in there.
+So you can imagine the textures of an image can influence the word **straw**, causing one of the numbers inside $y0$ to be higher because there are straw textures in there.
 
 RNN from now on has to juggle two tasks: it has to predict the next word in the sequence and it has to remember the image information.
 
 ![10056](../img/cs231n/winter2016/10056.png)
 
-So we sample from that softmax - and suppose the most likely word that we sampled from that distribution is indeed the word ==straw== - we would take straw and we would try to plug it into the RNN on the bottom ***again***.
+So we sample from that softmax - and suppose the most likely word that we sampled from that distribution is indeed the word **straw** - we would take **straw** and we would try to plug it into the RNN on the bottom ***again***.
 
 This is done by using word-level embeddings.
 
-So the ==straw== word is associated with a 300-dimensional vector.
+So the **straw** word is associated with a 300-dimensional vector.
 
 Which we are going to learn by the way - we are going to learn a 300-dimensional representation for every single unique word in the vocabulary.
 
@@ -505,13 +503,13 @@ We get all these probabilities, we sample from it again.
 
 ![10059](../img/cs231n/winter2016/10059.png)
 
-Suppose the word ==hat== is likely now. We take the ==hat== 300-dimensional representation vector, plug it in, and get the distribution over there.
+Suppose the word **hat** is likely now. We take the **hat** 300-dimensional representation vector, plug it in, and get the distribution over there.
 
 ![10060](../img/cs231n/winter2016/10060.png)
 
 We sample again. And we sample until we sample a special `<end>` token. Which is just a period at the end of the sentence.
 
-That tells us the RNN is now done generating. The RNN has described this image as - ==straw hat.==
+That tells us the RNN is now done generating. The RNN has described this image as **straw hat**.
 
 The number of dimensions in this $y$ vector is `number of words in your vocabulary + 1` for the special end token.
 
@@ -535,7 +533,7 @@ It is equivalent to having a one-hot representation of all the words and a giant
 
 **Q&A: Termination**
 
-Every training data has a special ==end token== in it.
+Every training data has a special **end token** in it.
 
 **Q&A: Image Usage**
 
@@ -581,7 +579,7 @@ This key is for what you want to look at next within an image.
 
 This key vector is emitted from the RNN; it is just predicted using some weights. This vector can be **dot producted** with all these $14x14$ locations for the $14x14x512$ activation volume.
 
-We do all these dot products, we compute a $14x14$ ==compatibility map== and then we put a softmax on this, so basically we normalize this so you get what we call ==the attention== of the image.
+We do all these dot products, we compute a $14x14$ **compatibility map** and then we put a softmax on this, so basically we normalize this so you get what we call **the attention** of the image.
 
 $14x14$ probability map over what's interesting for the RNN, right now, over the image. Then we use this probability mask to do a weighted sum of these guys (the activation volume - $14x14x512$) with this saliency.
 
@@ -593,7 +591,7 @@ It goes back, and you end up doing a weighted sum of different kinds of features
 
 As the RNN generates, it might decide like: *okay, I'd like to look for something object-like now*
 
-It emits a vector of 512 numbers of object-like stuff. It interacts with the ConvNet activation volume, and maybe some of the object-like regions of that volume ==light up==.
+It emits a vector of 512 numbers of object-like stuff. It interacts with the ConvNet activation volume, and maybe some of the object-like regions of that volume **light up**.
 
 And the saliency map, in the $14x14$ array, ends up focusing your attention on that part of the image through this interaction.
 
@@ -619,19 +617,23 @@ In the image below, we have time on the horizontal axis and different RNNs on th
 
 We are still doing the exact same thing as we were doing before. Using the same formula.
 
-We are taking a vector from ==below in depth== and ==before in time==, we are concatenating them and we are putting them through this $W^l$ transformation, and squish them with a $tanh()$.
+We are taking a vector from **below in depth** and **before in time**, we are concatenating them and we are putting them through this $W^l$ transformation, and squish them with a $tanh()$.
 
 What we had before:
+
 $$h = tanh(W_{xh} * x + W_{hh} * h)$$
 
 You can rewrite this as a concatenation of $x$ and $h$ multiplied by a single matrix.
 
 As if you stacked x and h into a single vector.
+
 $$\begin{bmatrix}
     x \\
     h \\
   \end{bmatrix}$$
+
 Then I have this $W$:
+
 $$\begin{bmatrix}
 W_{hx} & W_{xx}
 \end{bmatrix}
@@ -643,7 +645,7 @@ These RNNs are now indexed by both **time** and **layer** in which they occur.
 
 ![10066](../img/cs231n/winter2016/10066.png)
 
-Another way to stack them is to use a ==better recurrence formula==.
+Another way to stack them is to use a **better recurrence formula**.
 
 In practice, you will rarely use a formula like this. This is very rarely used.
 
@@ -711,7 +713,7 @@ We are adding a number between -1 and 1 with $i.g$ here. That might be confusing
 
 #### Gate Rationale
 
-If you think about $g$, it is a linear function of your ==context== squashed by $tanh()$.
+If you think about $g$, it is a linear function of your **context** squashed by $tanh()$.
 
 If we were adding just $g$ instead of $i.g$, that would be a really simple function, so by adding the $i$ in there having a multiplicative interaction, you are going to end up having a richer function that you can express.
 
@@ -729,7 +731,7 @@ By decoupling these 2, that also dynamically has some nice properties in terms o
 
 #### Cell Flow
 
-Think about this as ==cells going through==, the first interaction is $f . c$
+Think about this as **cells going through**, the first interaction is $f . c$.
 
 $f$ is an output of a sigmoid. So $f$ is basically gating your cells with a multiplicative interaction. -> If $f$ is 0, you will shut off the cell and reset the counter.
 
@@ -771,7 +773,7 @@ This cell state can, once you actually reset some counters and once you add numb
 
 There are many variances to an LSTM, people play a lot with these equations (the hidden state and the cell state), we have converged on this (what we explained) as being the reasonable thing. There are many little tweaks that you can make that do not deteriorate your performance by a lot.
 
-You can ==remove== some of the gates.
+You can **remove** some of the gates.
 
 The $tanh()$ of $c$ can be just a single $c$, that will work fine. $tanh()$ will make it work slightly better.
 
@@ -787,7 +789,7 @@ LSTM instead has these cell states flowing through, we are looking at the cells,
 
 And if you ignore the forget gates then we end up with basically just tweaking the cell by additive interaction.
 
-There is some stuff that is a function of the cell state, then whatever it is we end up, additively changing the cell state, ==instead of just transforming it right away.==
+There is some stuff that is a function of the cell state, then whatever it is we end up, additively changing the cell state, **instead of just transforming it right away**.
 
 It's an additive instead of transformative interaction.
 
@@ -795,7 +797,7 @@ It's an additive instead of transformative interaction.
 
 ### ResNet Connection
 
-Normally with a ConvNet we are transforming the representation, ResNets has these ==skip connections==, so ResNets has these additive interactions, so we have this $x$ (identity in the image down below), we do some computation based on $x$, then we have an additive interaction with $x$.
+Normally with a ConvNet we are transforming the representation, ResNets has these **skip connections**, so ResNets has these additive interactions, so we have this $x$ (identity in the image down below), we do some computation based on $x$, then we have an additive interaction with $x$.
 
 #### ResNet Block
 
@@ -807,13 +809,13 @@ We are converging into like very similar looking architectures that work in Conv
 
 ### Backpropagation Dynamics 🤔
 
-In the LSTM, if we inject some gradients signal at some time steps here, if we inject some gradient signal at the end of the diagram, then these plus interactions (in the image above) are just like a ==gradient super highway==.
+In the LSTM, if we inject some gradients signal at some time steps here, if we inject some gradient signal at the end of the diagram, then these plus interactions (in the image above) are just like a **gradient super highway**.
 
 These gradients will flow through all the addition interactions, because addition distributes gradients equally.
 
 So if we plug in any gradient at any point in time here it is just going to flow all the way back.
 
-And of course the gradient also flows through these $f$'s and they end up contributing their own gradients into the gradient flow, but you will never end up with what we referred to with RNN's problem called ==vanishing gradients==.
+And of course the gradient also flows through these $f$'s and they end up contributing their own gradients into the gradient flow, but you will never end up with what we referred to with RNN's problem called **vanishing gradients**.
 
 ### Vanishing Gradients - RNN vs LSTM
 
@@ -902,6 +904,7 @@ They tried really different things on LSTM.
 "[LSTM: A Search Space Odyssey](https://arxiv.org/abs/1503.04069)" by Greff et al. presents a comprehensive analysis of various Long Short-Term Memory (LSTM) variants and their impact on the performance of recurrent neural networks (RNNs).
 
 What they do:
+
 - The authors evaluate eight different LSTM variants, each with a single modification to the standard LSTM architecture.
 - They test these LSTM variants on three representative tasks: speech recognition, handwriting recognition, and polyphonic music modeling.
 - To ensure a fair comparison, the authors use random search to select the hyperparameters for each dataset and LSTM variant, resulting in a total of 5,400 trials.
@@ -909,6 +912,7 @@ What they do:
 Why they do it:
 
 - LSTMs have become the state-of-the-art models for many machine learning problems, but there is a lack of systematic studies on the utility of the different computational components within the LSTM architecture.
+
 - The authors aim to fill this gap by isolating the impact of each LSTM component and understanding its contribution to the overall performance of the model.
 
 What they achieve:
@@ -936,3 +940,5 @@ We gotta do gradient clipping.
 ![10081](../img/cs231n/winter2016/10081.png)
 
 We need better understanding.
+
+Done with lecture 10.

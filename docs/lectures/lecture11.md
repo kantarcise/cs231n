@@ -562,8 +562,6 @@ There are going to be $N$ different receptive field locations.
 
 So now we've taken our image and reshaped it into this giant matrix of $N \times (K^2 C)$. Does anyone see a potential problem with this?
 
-TODO - Cont.
-
 ![11068](../img/cs231n/winter2016/11068.png)
 
 This tends to use a lot of memory. Any element in this input volume, if it appears in multiple receptive fields, will be duplicated in multiple columns.
@@ -598,7 +596,7 @@ You can actually extend this to mini-batches quite easily. If you have a mini-ba
 
 It depends on your implementation, but then you have to worry about things like memory layout to make it fast.
 
-Sometimes you'll even do that reshape operation on the GPU so you can do it ==in parallel==.
+Sometimes you'll even do that reshape operation on the GPU so you can do it ***in parallel***.
 
 ![11071](../img/cs231n/winter2016/11071.png)
 
@@ -644,7 +642,7 @@ If you have memories from a signal processing class, you might remember the Conv
 
 It says that if you have two signals and you want to convolve them (either discretely or continuously), the Fourier transform of the convolution is the same as the element-wise product of the Fourier transforms.
 
-There's this amazing thing called the ==Fast Fourier Transform== that actually lets us compute Fourier transforms and inverse Fourier transforms really, really fast.
+There's this amazing thing called the ***Fast Fourier Transform*** that actually lets us compute Fourier transforms and inverse Fourier transforms really, really fast.
 
 There are versions of this in 1D and 2D, and they're all really fast.
 
@@ -653,6 +651,7 @@ There are versions of this in 1D and 2D, and they're all really fast.
 We can actually apply this trick to convolutions.
 
 The way this works is:
+
 1.  Use the FFT to compute the Fourier transform of the weights.
 2.  Compute the Fourier transform of our activation map.
 3.  In Fourier space, do an element-wise multiplication (which is really fast and efficient).
@@ -670,11 +669,11 @@ When you're working on these small $3 \times 3$ filters, the overhead of computi
 
 And as we discussed earlier, those small convolutions are really nice and appealing for lots of reasons.
 
-So it's a little bit of a shame that ==this Fourier trick doesn't work out too well in practice== for modern architectures.
+So it's a little bit of a shame that ***this Fourier trick doesn't work out too well in practice*** for modern architectures.
 
 But if for some reason you do want to compute really large convolutions, then this is something you can try.
 
-Another downside is that ==they don't handle striding too well==.
+Another downside is that ***they don't handle striding too well***.
 
 For normal strided convolutions in input space, you only compute a small subset of those inner products, saving a lot of computation.
 
@@ -765,7 +764,7 @@ It turns out a lot of people in machine learning and deep learning have really s
 
 NVIDIA is much more widely used than AMD for deep learning in practice. NVIDIA has done a lot in the last couple of years to really dive into deep learning and make it a core part of their focus.
 
-As a cool example, last year at GTC (NVIDIA's big conference), Jensen Huang (CEO of NVIDIA and Stanford alum) introduced the ==Titan X==, their flagship GPU. The benchmark he used to sell it was how fast it can train AlexNet.
+As a cool example, last year at GTC (NVIDIA's big conference), Jensen Huang (CEO of NVIDIA and Stanford alum) introduced the **Titan X**, their flagship GPU. The benchmark he used to sell it was how fast it can train AlexNet.
 
 ![11089](../img/cs231n/winter2016/11089.png)
 
@@ -796,6 +795,7 @@ cuDNN is a higher-level library, kind of like cuBLAS.
 cuDNN (CUDA Deep Neural Network library) is a GPU-accelerated library of primitives for deep neural networks developed by NVIDIA. It provides highly tuned implementations of standard operations like convolution, pooling, normalization, and activation functions.
 
 Key features:
+
 1.  **Performance Optimization**: Highly optimized for NVIDIA GPUs.
 2.  **Ease of Integration**: Integrated with TensorFlow, PyTorch, Caffe, etc.
 3.  **Hardware Abstraction**: Abstracts away low-level details.
@@ -819,19 +819,19 @@ Frameworks like Caffe and Torch have integrated cuDNN. So you can utilize these 
 
 ![11093](../img/cs231n/winter2016/11093.png)
 
-But the problem is that even with these really powerful GPUs, training big models is still kind of slow. VGGNet was famously trained for something like ==2 to 3 weeks== on 4 Titan Blacks.
+But the problem is that even with these really powerful GPUs, training big models is still kind of slow. VGGNet was famously trained for something like ***2 to 3 weeks*** on 4 Titan Blacks.
 
 A recent reimplementation of ResNet-101 also took about two weeks to train on four GPUs.
 
 The easy way to split up training across multiple GPUs is just to split your mini-batch across the GPUs.
 
-### Just split your mini-batch across the GPUs 🎱 🎱 🎱 🎱
+### Split mini-batch across GPUs 🎱 🎱 🎱 🎱
 
 Especially for something like VGGNet, which takes a lot of memory, you can't compute with very large mini-batch sizes on a single GPU.
 
 You'll have a mini-batch of images (maybe 128). You split the mini-batch into four equal chunks. On each GPU, you compute a forward and a backward pass for that chunk.
 
-You compute gradients and weights, ==sum those gradients after all four GPUs finish, and make an update to your model.==
+You compute gradients and weights, ***sum those gradients after all four GPUs finish, and make an update to your model.***
 
 This is a really simple way that people tend to implement distribution on GPUs.
 
@@ -853,7 +853,7 @@ This is a cool trick, not very commonly used, but fun to mention.
 
 ## Before Google had TensorFlow, they had DistBelief
 
-DistBelief was their previous system, which was ==entirely CPU-based==.
+DistBelief was their previous system, which was ***entirely CPU-based***.
 
 The first version of GoogLeNet was trained in DistBelief on CPU, so they had to do massive amounts of distribution to get these things to train.
 
@@ -903,7 +903,7 @@ Another problem is the CPU-Disk bottleneck. Hard disks are slow. SSDs are faster
 
 Both work best when reading data sequentially.
 
-### SSDs and Disks have this in common: they work best when reading sequentially.
+### SSDs and Disks work best when reading sequentially.
 
 Having a folder full of individual JPEG images is bad because of random seeks and decompression overhead.
 
@@ -911,7 +911,7 @@ In practice, you often preprocess data by decompressing it and writing out raw p
 
 This takes a lot of disk space, but we do it for speed.
 
-During training, you can't store all data in memory ==you have to read it off disk==, so you want that read to be as fast as possible.
+During training, you can't store all data in memory ***you have to read it off disk***, so you want that read to be as fast as possible.
 
 ![11101](../img/cs231n/winter2016/11101.png)
 
@@ -939,7 +939,7 @@ We often imagine these are just real numbers, but in practice, you need to think
 
 Default in many places is double precision (64-bit).
 
-More commonly used for deep learning is ==single precision (32-bit)==.
+More commonly used for deep learning is ***single precision (32-bit)***.
 
 ### Fewer bits = store more numbers, less compute. ✨
 
@@ -953,7 +953,7 @@ This was an issue on the homework. Numpy defaults to 64-bit, but we cast to 32-b
 
 ### If 32 bits are better than 64, can we use less?
 
-There is a standard for 16-bit floating-point (==half precision==). Recent cuDNN versions support this.
+There is a standard for 16-bit floating-point (***half precision***). Recent cuDNN versions support this.
 
 Nervana has 16-bit implementations that are currently the fastest convolutions out there.
 
@@ -963,7 +963,7 @@ But with 16-bit, you might worry about numeric precision. $2^{16}$ is not that b
 
 A paper from a couple of years ago experimented with low precision. They found that naive implementation caused networks to diverge.
 
-A simple trick was ==stochastic rounding==.
+A simple trick was ***stochastic rounding***.
 
 Store parameters in 16-bit, up-convert to higher precision for multiplication, then probabilistically round back down. This allows networks to converge nicely.
 
@@ -1011,4 +1011,4 @@ That's all for today.
 
 ![11111](../img/cs231n/winter2016/11111.png)
 
-Done!
+Done with lecture 11.

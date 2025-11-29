@@ -43,3 +43,5 @@ Here are my notes for each lecture:
 * [15. Closing and Guest Lecture](lectures/lecture15.md)
 
 Looking for assignment notes? You’ll find them under [Assignments](assignments/README.md).
+
+For more projects and resources, see [here](https://kantarcise.com/).

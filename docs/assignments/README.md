@@ -108,6 +108,8 @@ The notebook `LSTM_Captioning.ipynb` will walk you through the implementation of
 
 ---
 
+You can find my solutions [here](https://github.com/kantarcise/cs231n/tree/main/src).
+
 - [x] Assignment 1
 - [x] Assignment 2
 - [ ] Assignment 3

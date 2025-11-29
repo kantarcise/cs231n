@@ -1,110 +1,132 @@
 Part of [CS231n Winter 2016](../index.md)
 
 ---
-# From Andrej Karpathy
+## Lecture 15: Course Recap and Guest Lecture by Jeff Dean
 
 ---
 
-No recorded lecture, I guess this is a recap.
+There is no recorded lecture for this session. Instead, we have a recap of the course followed by notes from Jeff Dean's guest lecture.
 
 ![15001](../img/cs231n/winter2016/15001.png)
 
-First we defined Score Functions.
+### Course Recap
+
+We started by defining **Score Functions** to map pixels to class scores.
 
 ![15002](../img/cs231n/winter2016/15002.png)
 
-Loss functions after.
+Then we introduced **Loss Functions** to measure how good our predictions are.
 
 ![15003](../img/cs231n/winter2016/15003.png)
 
-We learned how to optimize them.
+We learned how to optimize these functions using **Gradient Descent** and backpropagation.
 
 ![15004](../img/cs231n/winter2016/15004.png)
 
-More powerful score functions.
+We looked at more powerful linear classifiers and score functions.
 
 ![15005](../img/cs231n/winter2016/15005.png)
 
-This bigger models gave us better results.
+We saw that bigger models generally gave us better results.
 
 ![15006](../img/cs231n/winter2016/15006.png)
 
-We learned how the learning process goes.
+We dove deep into the **Learning Process**, understanding activation functions, initialization, and regularization.
 
 ![15007](../img/cs231n/winter2016/15007.png)
 
-We explored Convolutional Neural Networks.
+We explored **Convolutional Neural Networks (ConvNets)**, the core of modern computer vision.
 
 ![15008](../img/cs231n/winter2016/15008.png)
 
-Explored more and more.
+We explored them further, looking at standard architectures like AlexNet, VGG, and GoogLeNet.
 
 ![15009](../img/cs231n/winter2016/15009.png)
 
-What are the downfalls of them?
+We discussed their potential downfalls and how to visualize what they learn.
 
 ![15010](../img/cs231n/winter2016/15010.png)
 
-We learned style transfer.
+We learned about **Style Transfer** and generating art with neural nets.
 
 ![15011](../img/cs231n/winter2016/15011.png)
 
-We discovered tricks on architecture.
+We discovered architectural tricks and newer models like ResNets.
 
 ![15012](../img/cs231n/winter2016/15012.png)
 
-How can we make them work in practice as well.
+We discussed how to make them work in practice, covering libraries like Caffe, Torch, and TensorFlow.
 
 ![15013](../img/cs231n/winter2016/15013.png)
 
-What are the bottlenecks happening?
+We looked at hardware bottlenecks and implementation details.
 
 ![15014](../img/cs231n/winter2016/15014.png)
 
-We saw that there are a lot of ways to do classification.
+We saw that there are many ways to approach classification and detection.
 
 ![15015](../img/cs231n/winter2016/15015.png)
 
-ResNets == LSTM's. We also saw how RNN's work too.
+We learned about **Recurrent Neural Networks (RNNs)** and **LSTMs** for sequence modeling.
 
 ![15016](../img/cs231n/winter2016/15016.png)
 
-The dragon.
+We tackled complex tasks like Image Captioning.
 
 ![15017](../img/cs231n/winter2016/15017.png)
 
-You are ready.
+You are now ready.
 
 ![15018](../img/cs231n/winter2016/15018.png)
 
-Conquer.
+Go forth and conquer.
 
 ![15019](../img/cs231n/winter2016/15019.png)
 
-Future.
+The future of computer vision is bright.
 
 ![15020](../img/cs231n/winter2016/15020.png)
 
-End.
+The End.
 
 ![15021](../img/cs231n/winter2016/15021.png)
 
-Thank you all.
+Thank you all!
 
 ![15022](../img/cs231n/winter2016/15022.png)
 
 ---
-# Jean Dean's Talk 🌳
+### Guest Lecture: Jeff Dean
 
-Andrew NG was spending 1 week at Google.
+Jeff Dean gave a guest lecture on large-scale deep learning at Google.
 
-Google Brain started 2011.
+**Background**:
 
-- **Research**: Speech, Images, Videos, Robotics, Language Understanding, NLP, translation, optimization algorithms and unsupervised learning
-- **Production**: Advertising, Search, Gmail, Photos, Maps, YouTube, Speech Recognition, Image Analysis, User Prediction
+-   Andrew Ng spent a week at Google in 2011, which kickstarted the Google Brain project.
+-   **Google Brain** started in 2011.
 
-Make the model run fast!
+**Research Areas**:
 
-Scaling both is really good. Data and Model Size.
+-   Speech Recognition
+-   Computer Vision (Images, Videos)
+-   Robotics
+-   Language Understanding (NLP, Translation)
+-   Optimization Algorithms
+-   Unsupervised Learning
 
-wip.
+**Production Applications**:
+
+-   Advertising
+-   Search
+-   Gmail (Smart Reply, Spam Filtering)
+-   Google Photos (Search, Organization)
+-   Google Maps (Street View analysis)
+-   YouTube (Recommendations, Analysis)
+-   Speech Recognition (Android, Home)
+
+**Key Takeaways**:
+
+-   **Performance matters**: Making models run fast is crucial for both research iteration and production deployment.
+
+-   **Scaling**: Scaling both **Data** and **Model Size** yields significant improvements. Large-scale distributed training is essential.
+

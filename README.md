@@ -77,4 +77,16 @@ In the notebook [`ConvolutionalNetworks.ipynb`](https://github.com/kantarcise/cs
 ### Q5: PyTorch on CIFAR-10
 For this part, you will be working with PyTorch, a popular and powerful deep learning framework. Open up [`PyTorch.ipynb`](https://github.com/kantarcise/cs231n/blob/main/src/assignment2/PyTorch.ipynb). There, you will learn how the framework works, culminating in training a convolutional network of your own design on CIFAR-10 to get the best performance you can.
 
-There was also a Network-Visualization question, but that is moved to Assignment 3.
+The Assignment 2 handout mentions Network Visualization moving to Assignment 3, but that exercise is not present in the official Spring 2022 Assignment 3 archive used below.
+
+## Assignment 3
+
+Assignment 3 is based on the [Spring 2022 offering](https://cs231n.github.io/assignments2022/assignment3/). It covers sequence models and modern representation learning:
+
+- Image captioning with vanilla RNNs and word embeddings.
+- Image captioning with a Transformer decoder and multi-head attention.
+- Generative adversarial networks, least-squares GANs, and DCGANs.
+- SimCLR-style self-supervised learning and contrastive loss.
+- Image captioning with LSTMs as the optional extra-credit exercise.
+
+The implementation and notebooks are in [`src/assignment3`](src/assignment3/README.md), together with a validation summary and instructions for downloading the datasets used by the original notebooks.

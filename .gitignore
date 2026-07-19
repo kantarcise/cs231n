@@ -4,3 +4,8 @@ venv/
 uv.lock
 __pycache__/
 *.egg-info/
+src/assignment3/data/
+src/assignment3/pretrained_model/
+src/assignment3/results/
+src/assignment3/cs231n/datasets/coco_captioning/
+src/assignment3/cs231n/datasets/imagenet_val_25.npz
